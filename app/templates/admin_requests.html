@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block title %}All Blood Requests{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>All Blood Requests</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Recipient</th>
+                <th>Type</th>
+                <th>Qty</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in requests %}
+            <tr>
+                <td>{{ r.request_id }}</td>
+                <td>{{ r.recipient_id }}</td>
+                <td>{{ r.blood_type }}</td>
+                <td>{{ r.quantity }}</td>
+                <td>{{ r.request_date }}</td>
+                <td>{{ r.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

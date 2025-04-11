@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% block title %}Edit Blood Unit{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 600px;">
+    <h2>Edit Blood Unit</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Blood Bank</label>
+            <select name="blood_bank_id" class="form-select" required>
+                {% for b in banks %}
+                <option value="{{ b.bank_id }}" {% if b.bank_id==unit.blood_bank_id %}selected{% endif %}>{{ b.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Donated Date</label>
+            <input type="date" name="donated_date" class="form-control" value="{{ unit.donated_date }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                <option value="available" {% if unit.status=='available' %}selected{% endif %}>Available</option>
+                <option value="assigned" {% if unit.status=='assigned' %}selected{% endif %}>Assigned</option>
+                <option value="transfused" {% if unit.status=='transfused' %}selected{% endif %}>Transfused</option>
+                <option value="expired" {% if unit.status=='expired' %}selected{% endif %}>Expired</option>
+                <option value="discarded" {% if unit.status=='discarded' %}selected{% endif %}>Discarded</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{{ url_for('admin.units') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

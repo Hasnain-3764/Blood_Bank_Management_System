@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block title %}Donate Blood{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4">Donate Blood</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="blood_bank_id" class="form-label">Choose Blood Bank</label>
+            <select class="form-select" id="blood_bank_id" name="blood_bank_id" required>
+                {% for bank in blood_banks %}
+                <option value="{{ bank.bank_id }}">{{ bank.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Submit Donation</button>
+    </form>
+</div>
+{% endblock %}

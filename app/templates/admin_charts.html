@@ -1,0 +1,113 @@
+{% extends 'layout.html' %}
+{% block title %}Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>📊 Admin Charts Dashboard</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h5>Blood Type Distribution</h5>
+            <canvas id="typeChart"></canvas>
+        </div>
+
+        <div class="col-md-6">
+            <h5>Inventory by Status</h5>
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h5>🗓️ Monthly Donations</h5>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h5>🏥 Units per Blood Bank</h5>
+            <canvas id="bankChart"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h5>💉 Request Status Breakdown</h5>
+            <canvas id="requestChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const typeData = {
+        labels: {{ type_counts | map(attribute = 0) | list | tojson }},
+    datasets: [{
+        label: 'Blood Units',
+        data: {{ type_counts | map(attribute = 1) | list | tojson }},
+        backgroundColor: ['#f87171', '#60a5fa', '#facc15', '#34d399', '#a78bfa', '#f472b6', '#fb923c', '#4ade80']
+        }]
+    };
+
+    const statusData = {
+        labels: {{ status_counts | map(attribute = 0) | list | tojson }},
+    datasets: [{
+        label: 'Unit Status',
+        data: {{ status_counts | map(attribute = 1) | list | tojson }},
+        backgroundColor: ['#60a5fa', '#facc15', '#f87171', '#a78bfa', '#4ade80']
+        }]
+    };
+
+    new Chart(document.getElementById('typeChart'), {
+        type: 'doughnut',
+        data: typeData
+    });
+
+    new Chart(document.getElementById('statusChart'), {
+        type: 'bar',
+        data: statusData
+    });
+
+    // Monthly donations
+    const monthlyData = {
+        labels: {{ monthly_donations | map(attribute = 0) | list | tojson }},
+    datasets: [{
+        label: 'Donations',
+        data: {{ monthly_donations | map(attribute = 1) | list | tojson }},
+        backgroundColor: '#60a5fa'
+        }]
+    };
+    new Chart(document.getElementById('monthlyChart'), {
+        type: 'bar',
+        data: monthlyData
+    });
+
+    // Units per blood bank
+    const bankData = {
+        labels: {{ bank_distribution | map(attribute = 0) | list | tojson }},
+    datasets: [{
+        label: 'Total Units',
+        data: {{ bank_distribution | map(attribute = 1) | list | tojson }},
+        backgroundColor: '#4ade80'
+        }]
+    };
+    new Chart(document.getElementById('bankChart'), {
+        type: 'bar',
+        data: bankData
+    });
+
+    // Blood request status
+    const requestData = {
+        labels: {{ request_status | map(attribute = 0) | list | tojson }},
+    datasets: [{
+        label: 'Requests',
+        data: {{ request_status | map(attribute = 1) | list | tojson }},
+        backgroundColor: ['#facc15', '#34d399', '#f87171']
+        }]
+    };
+    new Chart(document.getElementById('requestChart'), {
+        type: 'pie',
+        data: requestData
+    });
+
+</script>
+{% endblock %}

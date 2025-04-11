@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block title %}Manage Blood Units{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Manage Blood Units</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Donor</th>
+                <th>Blood Type</th>
+                <th>Bank</th>
+                <th>Donated</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in units %}
+            <tr>
+                <td>{{ unit.unit_id }}</td>
+                <td>{{ unit.donor_id }}</td>
+                <td>{{ unit.blood_type }}</td>
+                <td>{{ unit.blood_bank_id }}</td>
+                <td>{{ unit.donated_date }}</td>
+                <td>{{ unit.status }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_unit', unit_id=unit.unit_id) }}"
+                        class="btn btn-sm btn-primary">Edit</a>
+                    <form method="POST" action="{{ url_for('admin.delete_unit', unit_id=unit.unit_id) }}"
+                        style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Delete this unit?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

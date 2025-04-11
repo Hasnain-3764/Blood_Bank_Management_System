@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Welcome, {{ user.name }} (Admin)</h2>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card text-bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Donors</h5>
+                    <p class="card-text fs-3">{{ total_donors }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Recipients</h5>
+                    <p class="card-text fs-3">{{ total_recipients }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Blood Units</h5>
+                    <p class="card-text fs-3">{{ total_units }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Requests</h5>
+                    <p class="card-text fs-3">{{ total_requests }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="{{ url_for('admin.donations') }}" class="btn btn-outline-primary">View All Donations</a>
+    <a href="{{ url_for('admin.requests') }}" class="btn btn-outline-danger">View All Requests</a>
+    <a href="{{ url_for('admin.manage_requests') }}" class="btn btn-outline-warning">Manage Requests</a>
+    <a href="{{ url_for('admin.feedback') }}" class="btn btn-outline-info mt-2">View Feedback</a>
+    <a href="{{ url_for('admin.charts') }}" class="btn btn-outline-dark mt-3">📊 View Charts</a>
+
+</div>
+{% endblock %}

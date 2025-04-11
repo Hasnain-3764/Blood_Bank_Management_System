@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block title %}Recipient Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Welcome, {{ user.name }} (Recipient)</h2>
+    <a href="{{ url_for('recipient.request_blood') }}" class="btn btn-primary mb-3">Request Blood</a>
+
+    <h5>Your Blood Requests:</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Blood Type</th>
+                <th>Quantity</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in requests %}
+            <tr>
+                <td>{{ r.request_date }}</td>
+                <td>{{ r.blood_type }}</td>
+                <td>{{ r.quantity }}</td>
+                <td>{{ r.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

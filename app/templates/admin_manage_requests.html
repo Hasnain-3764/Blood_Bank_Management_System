@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block title %}Manage Blood Requests{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Manage Blood Requests</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Recipient</th>
+                <th>Blood Type</th>
+                <th>Qty</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in requests %}
+            <tr>
+                <td>{{ r.request_id }}</td>
+                <td>{{ r.recipient_id }}</td>
+                <td>{{ r.blood_type }}</td>
+                <td>{{ r.quantity }}</td>
+                <td>{{ r.request_date }}</td>
+                <td>{{ r.status }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_request', request_id=r.request_id) }}"
+                        class="btn btn-sm btn-primary">Edit</a>
+                    <form method="POST" action="{{ url_for('admin.delete_request', request_id=r.request_id) }}"
+                        style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Delete this request?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

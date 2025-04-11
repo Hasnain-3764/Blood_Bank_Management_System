@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block title %}User Feedback{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>User Feedback & Reviews</h2>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feedback, user in feedbacks %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.user_role }}</td>
+                <td>
+                    {% for i in range(feedback.rating) %}
+                    ⭐
+                    {% endfor %}
+                </td>
+                <td>{{ feedback.comments }}</td>
+                <td>{{ feedback.submission_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

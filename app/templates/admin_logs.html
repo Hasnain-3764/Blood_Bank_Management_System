@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block title %}Activity Logs{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>System Activity Logs</h2>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Action</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log, user in logs %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.user_role }}</td>
+                <td>{{ log.action }}</td>
+                <td>{{ log.timestamp }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

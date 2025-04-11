@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% block title %}Edit User{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 600px;">
+    <h2>Edit User</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input name="name" class="form-control" value="{{ user.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input name="phone" class="form-control" value="{{ user.phone_no }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Location</label>
+            <input name="location" class="form-control" value="{{ user.location }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">New Password (leave blank to keep existing)</label>
+            <input name="password" class="form-control" type="password">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Gender</label>
+            <select name="gender" class="form-select" required>
+                <option value="male" {% if user.gender=='male' %}selected{% endif %}>Male</option>
+                <option value="female" {% if user.gender=='female' %}selected{% endif %}>Female</option>
+                <option value="other" {% if user.gender=='other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Date of Birth</label>
+            <input name="dob" class="form-control" type="date" value="{{ user.dob }}" required>
+        </div>
+
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{{ url_for('admin.users') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% block title %}User Management{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>All Users</h2>
+    <h4 class="mt-4">Donors</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in donors %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.phone_no }}</td>
+                <td>{{ user.location }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_user', user_id=user.user_id) }}"
+                        class="btn btn-sm btn-primary">Edit</a>
+                    <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.user_id) }}"
+                        style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4 class="mt-5">Recipients</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in recipients %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.phone_no }}</td>
+                <td>{{ user.location }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_user', user_id=user.user_id) }}"
+                        class="btn btn-sm btn-primary">Edit</a>
+                    <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.user_id) }}"
+                        style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('admin.add_user') }}" class="btn btn-success mb-3">+ Add New User</a>
+</div>
+{% endblock %}
