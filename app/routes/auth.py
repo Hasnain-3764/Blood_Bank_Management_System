@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash
-from flask_login import login_user, logout_user
-from werkzeug.security import check_password_hash
+from flask_login import login_user, logout_user, current_user, login_required
 from app.models import User
+from werkzeug.security import check_password_hash
 from app import db, login_manager
 from app.models import ActivityLog
 from app.utils.logs import log_action
@@ -39,8 +39,12 @@ def login():
     return render_template('login.html')
 
 @auth_bp.route('/logout')
+@login_required
 def logout():
-    logout_user()
-    log_action(current_user.user_id, "Logged out")
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('auth.login'))
+    if current_user.is_authenticated:
+        log_action(current_user.user_id, "Logged out")
+        logout_user()  # This will log the user out
+        flash('You have been logged out.', 'info')  # Optional: Flash message to confirm logout
+    else:
+        flash('You are not logged in.', 'danger')
+    return redirect(url_for('auth.login'))  # Redirect to login page

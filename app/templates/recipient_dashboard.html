@@ -2,6 +2,8 @@
 {% block title %}Recipient Dashboard{% endblock %}
 
 {% block content %}
+<div style="margin-top: 100px;"></div>
+
 <div class="container mt-5">
     <h2>Welcome, {{ user.name }} (Recipient)</h2>
     <a href="{{ url_for('recipient.request_blood') }}" class="btn btn-primary mb-3">Request Blood</a>
