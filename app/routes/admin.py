@@ -7,7 +7,7 @@ from app.models import User, Donor, Recipient, BloodUnit, BloodRequest, BloodBan
 from app import db
 from app.models import ActivityLog
 from app.utils.logs import log_action
-from weasyprint import HTML
+# from weasyprint import HTML
 from io import BytesIO
 from sqlalchemy import func
 from datetime import datetime, timedelta
@@ -249,19 +249,19 @@ def logs():
     return render_template('admin_logs.html', logs=logs)
 
 
-@admin_bp.route('/report/donations/pdf')
-@login_required
-@role_required('admin')
-def export_donations_pdf():
-    units = BloodUnit.query.all()
+# @admin_bp.route('/report/donations/pdf')
+# @login_required
+# @role_required('admin')
+# def export_donations_pdf():
+#     units = BloodUnit.query.all()
 
-    html_template = render_template('pdf_donations_report.html', units=units)
-    pdf_file = BytesIO()
-    HTML(string=html_template).write_pdf(pdf_file)
-    pdf_file.seek(0)
+#     html_template = render_template('pdf_donations_report.html', units=units)
+#     pdf_file = BytesIO()
+#     HTML(string=html_template).write_pdf(pdf_file)
+#     pdf_file.seek(0)
 
-    return Response(pdf_file, mimetype='application/pdf',
-                    headers={'Content-Disposition': 'attachment; filename=blood_donations_report.pdf'})
+#     return Response(pdf_file, mimetype='application/pdf',
+#                     headers={'Content-Disposition': 'attachment; filename=blood_donations_report.pdf'})
 
 
 @admin_bp.route('/charts')
