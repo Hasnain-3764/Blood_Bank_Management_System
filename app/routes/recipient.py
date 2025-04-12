@@ -5,6 +5,7 @@ from app.models import Recipient, BloodRequest
 from datetime import date
 from app.utils.roles import role_required
 from app.utils.logs import log_action
+from app.utils.compatibility import is_compatible
 
 recipient_bp = Blueprint('recipient', __name__, url_prefix='/recipient')
 
@@ -36,6 +37,14 @@ def request_blood():
         blood_type = request.form['blood_type']
         quantity = int(request.form['quantity'])
         request_date = date.today()
+
+        # Check compatibility before submitting request
+        available_blood_units = BloodUnit.query.filter_by(blood_type=blood_type, status='available').all()
+        compatible = any(is_compatible(unit.blood_type, recipient.blood_type) for unit in available_blood_units)
+
+        if not compatible:
+            flash(f"Sorry, no compatible blood type available for {blood_type}!", "danger")
+            return redirect(url_for('recipient.request_blood'))
 
         new_request = BloodRequest(
             recipient_id=recipient.recipient_id,

@@ -19,26 +19,21 @@ def dashboard():
 @role_required('donor')
 def donate():
     donor = Donor.query.filter_by(user_id=current_user.user_id).first()
+    blood_banks = BloodBank.query.all()
     if not donor:
         flash("No donor record found for this user.", "danger")
         return redirect(url_for('donor.dashboard'))
-
-    blood_banks = BloodBank.query.all()
+    
+    # Check if the donor is eligible
+    last_donation = MedicalHistory.query.filter_by(user_id=current_user.user_id, donate_taken='donate').order_by(MedicalHistory.date1.desc()).first()
+    if last_donation and (date.today() - last_donation.date1) < timedelta(days=90):
+        flash("You are not eligible to donate. You need to wait at least 90 days between donations.", "danger")
+        return redirect(url_for('donor.dashboard'))
 
     if request.method == 'POST':
+        # Proceed with donation if eligible
         blood_bank_id = request.form['blood_bank_id']
         donation_date = date.today()
-        # expiry_date = donation_date + timedelta(days=42)
-
-        # # Add to blood_units
-        # new_unit = BloodUnit(
-        #     donor_id=donor.donor_id,
-        #     blood_bank_id=blood_bank_id,
-        #     blood_type=donor.blood_type,
-        #     donated_date=donation_date,
-        #     expiry=expiry_date,
-        #     status='available'
-        # )
 
         new_unit = BloodUnit(
             donor_id=donor.donor_id,
@@ -49,16 +44,18 @@ def donate():
         )
         db.session.add(new_unit)
 
-        # Add to medical_history
+        # Add to medical history
         donation_record = MedicalHistory(
             user_id=current_user.user_id,
             date1=donation_date,
             donate_taken='donate'
         )
         db.session.add(donation_record)
-
         db.session.commit()
+        
+        # Log the action
         log_action(current_user.user_id, f"Donated blood to bank ID {blood_bank_id}")
+        
         flash("Donation recorded successfully!", "success")
         return redirect(url_for('donor.dashboard'))
 
