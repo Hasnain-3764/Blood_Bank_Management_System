@@ -5,10 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Blood Bank System{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet">
+
+<!-- Material Kit CSS -->
+<link href="https://demos.creative-tim.com/material-kit/assets/css/material-kit.min.css" rel="stylesheet" />
+
 </head>
 
-<body>
+<body style="padding-top: 56px;" >
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
@@ -45,7 +51,9 @@
 
     {% block content %}{% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://demos.creative-tim.com/material-kit/assets/js/core/bootstrap.min.js"></script>
+    <script src="https://demos.creative-tim.com/material-kit/assets/js/material-kit.min.js"></script>
+
 </body>
 
 </html>
