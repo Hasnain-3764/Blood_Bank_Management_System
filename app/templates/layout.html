@@ -4,50 +4,191 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Blood Bank System{% endblock %}</title>
+    <title>{% block title %}RaktDaan{% endblock %}</title>
+
     <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet">
-
     <!-- Material Kit CSS -->
     <link href="https://demos.creative-tim.com/material-kit/assets/css/material-kit.min.css" rel="stylesheet" />
 
+    <style>
+        .navbar {
+            background-color: #667eea;
+            /* Blueish color before login */
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+        }
+
+        /* Change navbar color after login */
+            {
+            % if current_user.is_authenticated %
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            /* White navbar when logged in */
+        }
+
+            {
+            % endif %
+        }
+
+        .navbar .navbar-brand {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #d32f2f !important;
+            /* Red text for the brand (RaktDaan) */
+            transition: all 0.3s ease;
+        }
+
+        .navbar .navbar-brand:hover {
+            color: #ff0505 !important;
+        }
+
+        .navbar .nav-link {
+            color: #000000 !important;
+            /* White color for links */
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        .navbar .nav-link.active,
+        .navbar .nav-link:hover {
+            color: #2738d3 !important;
+            border-bottom: 2px solid #2738d3;
+        }
+
+        .navbar .nav-item {
+            margin-left: 20px;
+        }
+
+        .navbar .navbar-toggler {
+            border: 1px solid #ffffff;
+        }
+
+        .navbar img {
+            width: 50px;
+            /* Adjust logo size */
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .btn-floating {
+            background-color: #ff0000;
+        }
+
+        .nav-link.disabled {
+            color: rgba(255, 255, 255, 0.6) !important;
+            pointer-events: none;
+        }
+
+        .navbar .navbar-nav {
+            justify-content: flex-end;
+        }
+
+        .navbar .nav-item .nav-link {
+            font-size: 1rem;
+            padding: 10px 15px;
+        }
+
+        /* Floating Logout Button */
+        .btn-floating {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* About/Contact pages */
+        #home {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+    </style>
 </head>
 
 <body style="padding-top: 56px;">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark"
-        style="background-color: rgba(0, 0, 0, 0.7); position: fixed; top: 0; width: 100%; z-index: 1030;">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Blood Bank</a>
+            <!-- Logo with RaktDaan -->
+            <a class="navbar-brand {% if request.path == '/' %}active{% endif %}" href="{{ url_for('auth.home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="RaktDaan Logo">
+                RaktDaan
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Conditionally Render Dashboard Buttons Based on User Role -->
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.user_role == 'donor' %}
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('auth.login') }}">Login</a>
+                        <a class="nav-link {% if request.path.startswith('/donor') %}active{% endif %}"
+                            href="{{ url_for('donor.dashboard') }}">Donor Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('donor.dashboard') }}">Donor Dashboard</a>
+                        <a class="nav-link {% if request.path.startswith('/donor/profile') %}active{% endif %}"
+                            href="{{ url_for('donor.profile') }}">Donor Profile</a>
+                    </li>
+                    {% elif current_user.user_role == 'recipient' %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path.startswith('/recipient') %}active{% endif %}"
+                            href="{{ url_for('recipient.dashboard') }}">Recipient Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('recipient.dashboard') }}">Recipient Dashboard</a>
+                        <a class="nav-link {% if request.path.startswith('/recipient/profile') %}active{% endif %}"
+                            href="{{ url_for('recipient.profile') }}">Recipient Profile</a>
+                    </li>
+                    {% elif current_user.user_role == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path.startswith('/admin') %}active{% endif %}"
+                            href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
+                        <a class="nav-link {% if request.path.startswith('/admin/users') %}active{% endif %}"
+                            href="{{ url_for('admin.users') }}">Manage Users</a>
                     </li>
+                    {% endif %}
+                    {% endif %}
+
+                    <!-- Common Pages: About Us, Contact Us -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path.startswith('/about') %}active{% endif %}"
+                            href="{{ url_for('auth.about') }}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path.startswith('/contact') %}active{% endif %}"
+                            href="{{ url_for('auth.contact') }}">Contact Us</a>
+                    </li>
+
+                    <!-- Login Button visible only when logged out -->
+                    {% if not current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path.startswith('/login') %}active{% endif %}"
+                            href="{{ url_for('auth.login') }}">Login</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-
-    <!-- Floating Logout Button -->
+    <!-- Floating Logout Button (only visible after login) -->
     {% if current_user.is_authenticated %}
-    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger btn-floating"
-        style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger btn-floating">
         <i class="bi bi-box-arrow-right"></i> Logout
     </a>
     {% endif %}
@@ -56,7 +197,6 @@
 
     <script src="https://demos.creative-tim.com/material-kit/assets/js/core/bootstrap.min.js"></script>
     <script src="https://demos.creative-tim.com/material-kit/assets/js/material-kit.min.js"></script>
-
 </body>
 
 </html>
