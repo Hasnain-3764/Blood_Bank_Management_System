@@ -24,12 +24,16 @@ def dashboard():
     total_units = BloodUnit.query.count()
     total_requests = BloodRequest.query.count()
 
+    # NEW: fetch recent activity logs
+    logs = db.session.query(ActivityLog, User).join(User).order_by(ActivityLog.timestamp.desc()).limit(5).all()
+
     return render_template('admin_dashboard.html',
                            user=current_user,
                            total_donors=total_donors,
                            total_recipients=total_recipients,
                            total_units=total_units,
-                           total_requests=total_requests)
+                           total_requests=total_requests,
+                           logs=logs)
 
 
 @admin_bp.route('/donations')

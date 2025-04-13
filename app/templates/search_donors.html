@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+{% block title %}Search Donors{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>🔍 Search Donors</h2>
+
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="blood_type" class="form-label">Blood Type</label>
+            <select class="form-select" id="blood_type" name="blood_type">
+                <option value="">-- Select Blood Type --</option>
+                {% for bt in ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'] %}
+                <option value="{{ bt }}" {% if bt==selected_blood %}selected{% endif %}>{{ bt }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="location" class="form-label">Location (City/Area)</label>
+            <input type="text" class="form-control" id="location" name="location" placeholder="e.g., Mumbai"
+                value="{{ selected_location or '' }}">
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+    {% if donors %}
+    <h5>🔎 Found {{ donors|length }} matching donor(s)</h5>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Blood Type</th>
+                <th>Phone No</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for donor, user in donors %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ donor.blood_type }}</td>
+                <td>{{ user.phone_no }}</td>
+                <td>{{ user.location }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% elif selected_blood or selected_location %}
+    <p class="text-danger">❌ No donors matched your criteria.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@ def create_app():
 
     # App config
     app.config['SECRET_KEY'] = 'super-secret-key'  # Change to a secure one in production
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:holamigo@localhost/blood_management_system'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:your_password@localhost/BLOOD_MANAGEMENT_SYSTEM'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Initialize extensions with app

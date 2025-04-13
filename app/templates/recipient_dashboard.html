@@ -6,7 +6,13 @@
 
 <div class="container mt-5">
     <h2>Welcome, {{ user.name }} (Recipient)</h2>
-    <a href="{{ url_for('recipient.request_blood') }}" class="btn btn-primary mb-3">Request Blood</a>
+
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a href="{{ url_for('recipient.request_blood') }}" class="btn btn-primary">🩸 Request Blood</a>
+        <a href="{{ url_for('recipient.search_donors') }}" class="btn btn-outline-primary">🔍 Search Donors</a>
+        <a href="{{ url_for('recipient.profile') }}" class="btn btn-outline-success">👤 View/Edit Profile</a>
+        <a href="{{ url_for('recipient.feedback') }}" class="btn btn-outline-warning">📝 Give Feedback</a>
+    </div>
 
     <h5>Your Blood Requests:</h5>
     <table class="table table-bordered">

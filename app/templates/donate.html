@@ -5,17 +5,29 @@
 <div class="container mt-5" style="max-width: 600px;">
     <h2 class="mb-4">Donate Blood</h2>
 
+    {% if ineligible %}
+    <div class="alert alert-warning">
+        ⛔ You’ve already donated recently. You can donate again after 90 days.
+        {% if next_eligible_date %}
+        <br>🗓️ Next eligible donation date: <strong>{{ next_eligible_date.strftime('%B %d, %Y') }}</strong>
+        {% endif %}
+    </div>
+    {% endif %}
+
+
     <form method="POST">
         <div class="mb-3">
             <label for="blood_bank_id" class="form-label">Choose Blood Bank</label>
-            <select class="form-select" id="blood_bank_id" name="blood_bank_id" required>
+            <select class="form-select" id="blood_bank_id" name="blood_bank_id" required {% if ineligible %}disabled{%
+                endif %}>
                 {% for bank in blood_banks %}
                 <option value="{{ bank.bank_id }}">{{ bank.name }}</option>
                 {% endfor %}
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Submit Donation</button>
+        <button type="submit" class="btn btn-primary w-100" {% if ineligible %}disabled{% endif %}>Submit
+            Donation</button>
     </form>
 </div>
 {% endblock %}

@@ -1,0 +1,17 @@
+# Ignore Python virtual environments
+venv/
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Editor / IDE config files
+*.vscode/
+.idea/
+
+# Environment variables or secrets (optional)
+.env
+
+# Mac/Linux/Windows system files
+.DS_Store
+Thumbs.db

@@ -2,9 +2,18 @@
 {% block title %}Donor Dashboard{% endblock %}
 
 {% block content %}
+<div style="margin-top: 100px;"></div>
 <div class="container mt-5">
     <h2>Welcome, {{ user.name }} (Donor)</h2>
     <p>This is your donor dashboard.</p>
-    <a href="{{ url_for('donor.donate') }}" class="btn btn-success">Donate Blood</a>
+
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a href="{{ url_for('donor.donate') }}" class="btn btn-success">🩸 Donate Blood</a>
+        <a href="{{ url_for('donor.history') }}" class="btn btn-outline-primary">📄 View Donation History</a>
+        <a href="{{ url_for('donor.profile') }}" class="btn btn-outline-success">👤 Edit Profile</a>
+        <a href="{{ url_for('donor.feedback') }}" class="btn btn-outline-warning">📝 Submit Feedback</a>
+    </div>
+
+    <p class="text-muted">Stay updated with your contributions and profile.</p>
 </div>
 {% endblock %}

@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app import db
-from app.models import Recipient, BloodRequest
+from app.models import Recipient, BloodRequest, Feedback
 from datetime import date
 from app.utils.roles import role_required
 from app.utils.logs import log_action
 from app.utils.compatibility import is_compatible
+from app.models import Donor, User, Recipient, BloodRequest
 
 recipient_bp = Blueprint('recipient', __name__, url_prefix='/recipient')
 
@@ -61,3 +62,68 @@ def request_blood():
         return redirect(url_for('recipient.dashboard'))
 
     return render_template('request_blood.html', user=current_user)
+
+
+@recipient_bp.route('/search-donors', methods=['GET', 'POST'])
+@login_required
+@role_required('recipient')
+def search_donors():
+    donors = []
+    selected_blood = None
+    selected_location = None
+
+    if request.method == 'POST':
+        selected_blood = request.form.get('blood_type')
+        selected_location = request.form.get('location')
+
+        query = db.session.query(Donor, User).join(User)
+
+        if selected_blood:
+            query = query.filter(Donor.blood_type == selected_blood)
+        if selected_location:
+            query = query.filter(User.location.ilike(f"%{selected_location}%"))
+
+        donors = query.all()
+
+    return render_template('search_donors.html', user=current_user, donors=donors,
+                           selected_blood=selected_blood, selected_location=selected_location)
+
+
+@recipient_bp.route('/profile', methods=['GET', 'POST'])
+@login_required
+@role_required('recipient')
+def profile():
+    recipient = Recipient.query.filter_by(user_id=current_user.user_id).first()
+    user = current_user
+
+    if request.method == 'POST':
+        user.name = request.form.get('name')
+        user.phone_no = request.form.get('phone_no')
+        user.location = request.form.get('location')
+        user.gender = request.form.get('gender')
+        user.dob = request.form.get('dob')
+
+        db.session.commit()
+        flash("✅ Profile updated successfully!", "success")
+        return redirect(url_for('recipient.profile'))
+
+    return render_template('profile.html', user=user, recipient=recipient)
+
+
+
+@recipient_bp.route('/feedback', methods=['GET', 'POST'])
+@login_required
+@role_required('recipient')
+def feedback():
+    if request.method == 'POST':
+        comments = request.form.get('message')  # still using `message` from form
+        rating = int(request.form.get('rating')) if request.form.get('rating') else None
+
+        feedback = Feedback(user_id=current_user.user_id, comments=comments, rating=rating)
+        db.session.add(feedback)
+        db.session.commit()
+
+        flash("✅ Thank you for your feedback!", "success")
+        return redirect(url_for('recipient.dashboard'))
+
+    return render_template('feedback.html', user=current_user)

@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% block title %}Donation History{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>📄 Your Donation History</h2>
+
+    {% if donations %}
+    <table class="table table-bordered mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>Date</th>
+                <th>Blood Bank</th>
+                <th>Blood Type</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in donations %}
+            <tr>
+                <td>{{ unit.donated_date.strftime('%b %d, %Y') }}</td>
+                <td>{{ unit.blood_bank_id }}</td>
+                <td>{{ unit.blood_type }}</td>
+                <td>
+                    {% if unit.status == 'available' %}
+                    <span class="badge bg-success">Available</span>
+                    {% elif unit.status == 'used' %}
+                    <span class="badge bg-secondary">Used</span>
+                    {% elif unit.status == 'expired' %}
+                    <span class="badge bg-danger">Expired</span>
+                    {% else %}
+                    <span class="badge bg-warning">Unknown</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('donor.certificate', unit_id=unit.unit_id) }}"
+                        class="btn btn-sm btn-outline-secondary">
+                        📄 Download Certificate
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted mt-4">You haven’t made any donations yet.</p>
+    {% endif %}
+
+
+
+</div>
+{% endblock %}

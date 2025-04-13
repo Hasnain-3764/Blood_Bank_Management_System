@@ -1,6 +1,6 @@
 from . import db
 from flask_login import UserMixin
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from sqlalchemy import Computed
 
 class User(UserMixin, db.Model):
@@ -109,13 +109,22 @@ class RequestFulfillment(db.Model):
     fulfillment_date = db.Column(db.Date)
 
 
+# class Feedback(db.Model):
+#     __tablename__ = 'feedback_and_reviews'
+#     feedback_id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+#     rating = db.Column(db.Integer)
+#     comments = db.Column(db.Text)
+#     submission_date = db.Column(db.Date)
+
 class Feedback(db.Model):
     __tablename__ = 'feedback_and_reviews'
+
     feedback_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     rating = db.Column(db.Integer)
-    comments = db.Column(db.Text)
-    submission_date = db.Column(db.Date)
+    comments = db.Column(db.Text, nullable=False)
+    submission_date = db.Column(db.Date, default=datetime.utcnow().date)
 
 class ActivityLog(db.Model):
     __tablename__ = 'activity_logs'
