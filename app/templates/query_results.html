@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}Query Results{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Query Results</h2>
+    <h4>{{ query.description }}</h4>
+
+    <!-- Table for displaying query results -->
+    <table class="table table-bordered mt-4">
+        <thead class="table-dark">
+            <tr>
+                <!-- Dynamically generate table headers -->
+                {% for column in result[0].keys() %}
+                <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in result %}
+            <tr>
+                <!-- Dynamically generate table rows -->
+                {% for column in row %}
+                <td>{{ row[column] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('admin.queries') }}" class="btn btn-secondary mt-3">Back to Queries</a>
+</div>
+{% endblock %}

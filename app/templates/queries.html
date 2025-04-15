@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block title %}Admin - Queries{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Admin Queries</h2>
+    <p>Choose a query to run:</p>
+
+    <div class="list-group">
+        {% for query in queries %}
+        <div class="list-group-item">
+            <h5>{{ query.description }}</h5>
+            <form method="POST" action="{{ url_for('admin.queries') }}">
+                <input type="hidden" name="query_id" value="{{ query.id }}">
+                <button type="submit" class="btn btn-primary">Run Query</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

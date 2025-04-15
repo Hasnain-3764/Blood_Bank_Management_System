@@ -7,6 +7,8 @@ from app.models import User, Donor, Recipient, BloodUnit, BloodRequest, BloodBan
 from app import db
 from app.models import ActivityLog
 from app.utils.logs import log_action
+from sqlalchemy import text
+
 # from weasyprint import HTML
 from io import BytesIO
 from sqlalchemy import func
@@ -26,6 +28,7 @@ def dashboard():
 
     # NEW: fetch recent activity logs
     logs = db.session.query(ActivityLog, User).join(User).order_by(ActivityLog.timestamp.desc()).limit(5).all()
+
 
     return render_template('admin_dashboard.html',
                            user=current_user,
@@ -313,3 +316,96 @@ def charts():
                            bank_distribution=bank_distribution,
                            request_status=request_status)
 
+
+from sqlalchemy import text
+
+@admin_bp.route('/queries', methods=['GET', 'POST'])
+@login_required
+@role_required('admin')
+def queries():
+    queries_list = [
+        {
+            'id': 1,
+            'query': text("""
+                SELECT br.request_id,
+                       br.recipient_id,
+                       br.blood_type AS requested_type,
+                       br.quantity AS requested_quantity,
+                       bu.unit_id,
+                       bu.donated_date,
+                       bu.expiry
+                FROM blood_requests br
+                JOIN blood_units bu ON br.blood_type = bu.blood_type
+                WHERE br.status = 'pending' 
+                  AND bu.status = 'available';
+            """),
+            'description': "List of pending blood requests with available blood units."
+        },
+        {
+            'id': 2,
+            'query': text("""
+                SELECT unit_id,
+                       blood_type,
+                       donated_date,
+                       expiry,
+                       status
+                FROM blood_units
+                WHERE expiry < CURRENT_DATE
+                  AND status IN ('expired');
+            """),
+            'description': "List of expired blood units."
+        },
+        {
+            'id': 3,
+            'query': text("""
+                SELECT b.name AS blood_bank,
+                       bu.blood_type,
+                       COUNT(bu.unit_id) AS available_units
+                FROM blood_units bu
+                JOIN blood_banks b ON bu.blood_bank_id = b.bank_id
+                WHERE bu.status = 'available'
+                GROUP BY b.name, bu.blood_type
+                HAVING COUNT(bu.unit_id) < 12;
+            """),
+            'description': "Blood banks with less than 10 available units."
+        },
+        {
+            'id': 4,
+            'query': text("""
+                SELECT b.name AS blood_bank,
+                       bu.blood_type,
+                       COUNT(bu.unit_id) AS total_units
+                FROM blood_units bu
+                JOIN blood_banks b ON bu.blood_bank_id = b.bank_id
+                GROUP BY b.name, bu.blood_type;
+            """),
+            'description': "Total blood units in each blood bank."
+        },
+        {
+            'id': 5,
+            'query': text("""
+                SELECT ROUND(AVG(donation_count), 2) AS avg_donations_per_donor
+                FROM (
+                    SELECT d.donor_id, COUNT(bu.unit_id) AS donation_count
+                    FROM donors d
+                    LEFT JOIN blood_units bu ON d.donor_id = bu.donor_id
+                    GROUP BY d.donor_id
+                ) AS donor_donations;
+            """),
+            'description': "The average number of blood donations per donor.."
+        }
+    ]
+
+    if request.method == 'POST':
+        query_id = request.form.get('query_id')
+        query = next((q for q in queries_list if q['id'] == int(query_id)), None)
+        
+        if query:
+            # Execute the query and fetch the result
+            result = db.session.execute(query['query']).fetchall()
+
+            # Convert the result from SQLAlchemy Row to dictionary using _mapping
+            result_dict = [dict(row._mapping) for row in result]  # Convert to dictionary
+            return render_template('query_results.html', query=query, result=result_dict)
+    
+    return render_template('queries.html', queries=queries_list)
