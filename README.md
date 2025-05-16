@@ -1,5 +1,13 @@
 # Blood_Bank_Management_System
-Blood Bank Management System
+
+**screenshots**
+
+![image](https://github.com/user-attachments/assets/4054e3a1-d7ae-432f-9ca0-4a45c7018e54)
+
+
+ ![image](https://github.com/user-attachments/assets/57ed6b24-b3d2-46f3-bc89-b0e4722ef8dd)
+
+ 
 
 # 🩸 Blood Bank Management System
 
