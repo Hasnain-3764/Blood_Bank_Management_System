@@ -95,6 +95,7 @@ Blood_Bank_Management_System/
 * `requirements.txt`: List of Python dependencies.
 * `run.py`: Entry point to start the Flask application.
 
+````
 ## 🔑 Additional Resources
 
 - To get sample users and passwords, [click here](https://docs.google.com/document/d/1KERAR1CE8AaVnowDRec_lVvMLt1GuXQmkKWqwuMxJjA/edit?usp=sharing).
