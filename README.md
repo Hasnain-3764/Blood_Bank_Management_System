@@ -15,7 +15,7 @@ A web-based application designed to streamline blood donation and transfusion pr
 
 ## 📌 Overview
 
-This project aims to facilitate efficient management of blood donations and requests. It provides functionalities for users to register as donors or recipients, and for administrators to manage blood inventories and user requests.
+This project aims to facilitate the efficient management of blood donations and requests. It provides functionalities for users to register as donors or recipients, and for administrators to manage blood inventories and user requests.
 
 ## 🔧 Features
 
@@ -94,6 +94,14 @@ Blood_Bank_Management_System/
 * `old_version/`: Archive of previous versions for reference.
 * `requirements.txt`: List of Python dependencies.
 * `run.py`: Entry point to start the Flask application.
+
+## 🔑 Additional Resources
+
+- To get sample users and passwords, [click here](https://docs.google.com/document/d/1KERAR1CE8AaVnowDRec_lVvMLt1GuXQmkKWqwuMxJjA/edit?usp=sharing).
+- To get a detailed view of our database design and queries, [click here](https://docs.google.com/document/d/1uotHiBb2fFlsTfjUPEzBt_DvCAADdTyjzzKw5lAtoy4/edit?usp=sharing).
+- To get a detailed view of the relationship schema, [click here](https://lucid.app/lucidchart/a26e0787-038c-4228-b9dc-b8f602fa5e56/edit?viewport_loc=2309%2C-8537%2C2217%2C1036%2C0_0&invitationId=inv_1406b0ed-c9d8-4526-8826-c5bd8dbe6974).
+- To get a detailed view of the ER diagram, [click here](https://lucid.app/lucidchart/408e70e1-31ca-4df8-9f47-d6ed7a878e37/edit?viewport_loc=8653%2C5757%2C2217%2C1036%2C0_0&invitationId=inv_a8399097-eed9-4a75-8172-3bbf4b3ac477).
+
 
 ## 👥 Contributors
 
